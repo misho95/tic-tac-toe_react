@@ -19,12 +19,20 @@ export default {
       },
       width: {
         w460: "460px",
+        w412: "412px",
         w410: "410px",
+        w327: "327px",
+        w279: "279px",
         w226: "226px",
+        w198: "195px",
+        w132: "132px",
       },
       height: {
         h205: "205px",
+        h72: "72px",
         h67: "67px",
+        h56: "56px",
+        h54: "54px",
         h52: "52px",
       },
       boxShadow: {
