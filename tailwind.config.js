@@ -38,6 +38,9 @@ export default {
       boxShadow: {
         DSMainButton: "0px -8px 0px 0px inset",
       },
+      fontFamily: {
+        outfit: "Outfit",
+      },
     },
   },
   plugins: [],
