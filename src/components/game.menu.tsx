@@ -1,13 +1,18 @@
 import MainButton from "../components/main.button";
 import Logo from "../assets/logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PropsType {
   setGameType: (arg: number) => void;
+  setPlayersMark: (arg: boolean) => void;
 }
 
-const GameMenu = ({ setGameType }: PropsType) => {
+const GameMenu = ({ setGameType, setPlayersMark }: PropsType) => {
   const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    setPlayersMark(active === 0 ? true : false);
+  }, [active]);
 
   return (
     <div className="w-w327 sm:w-w460 flex flex-col gap-6 items-center">
