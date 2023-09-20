@@ -1,12 +1,22 @@
 interface PropsType {
   text: string;
   color: string;
+  size: string;
+  icon: boolean;
+  onClickHandler: () => void;
 }
 
-const SecondaryButton = ({ text, color }: PropsType) => {
+const SecondaryButton = ({
+  text,
+  color,
+  size,
+  icon,
+  onClickHandler,
+}: PropsType) => {
   return (
     <button
-      className={`w-w226 h-h52 rounded-lg shadow-DSMainButton font-semibold text-darkNavy ${
+      onClick={onClickHandler}
+      className={`${size} rounded-lg shadow-DSSButton font-semibold text-darkNavy ${
         color === "yellow"
           ? "bg-lightYellow  shadow-lightYellowShadow"
           : "bg-silver shadow-silverShadow"
@@ -16,7 +26,10 @@ const SecondaryButton = ({ text, color }: PropsType) => {
           : "active:bg-silverHover"
       }`}
     >
-      {text}
+      {!icon && text}
+      {icon && (
+        <span className="material-symbols-outlined select-none">{text}</span>
+      )}
     </button>
   );
 };

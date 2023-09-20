@@ -25,10 +25,14 @@ export default {
         w279: "279px",
         w226: "226px",
         w198: "195px",
+        w140: "140px",
         w132: "132px",
+        w52: "52px",
       },
       height: {
+        h623: "623px",
         h205: "205px",
+        h140: "140px",
         h72: "72px",
         h67: "67px",
         h56: "56px",
@@ -37,6 +41,7 @@ export default {
       },
       boxShadow: {
         DSMainButton: "0px -8px 0px 0px inset",
+        DSSButton: "0px -4px 0px 0px inset",
       },
       fontFamily: {
         outfit: "Outfit",

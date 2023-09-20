@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="w-full min-h-screen bg-darkNavy flex justify-center items-center">
       {gameType === 0 && <GameMenu setGameType={setGameType} />}
-      {gameType !== 0 && <PlayGame />}
+      {gameType !== 0 && <PlayGame gameType={gameType} />}
     </div>
   );
 }
