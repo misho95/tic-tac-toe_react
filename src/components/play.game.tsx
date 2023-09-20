@@ -1,5 +1,6 @@
 import Logo from "../assets/logo.svg";
 import Box from "./box";
+import Modal from "./modal";
 import SecondaryButton from "./secondary.button";
 import { useEffect, useState } from "react";
 
@@ -19,9 +20,12 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
     value: 0,
   }));
 
+  const newStats = { xPlayer: 0, tie: 0, oPlayer: 0 };
+
   const [gameBox, setGameBox] = useState<gameBoxType[]>(newGame);
   const [turn, setTurn] = useState(true);
   const [endGame, setEndGame] = useState(false);
+  const [stats, setStats] = useState(newStats);
 
   const drawSymbol = (id: number) => {
     if (!endGame) {
@@ -115,6 +119,13 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
     const endGame = checkWinner(gameBox, !turn);
 
     if (endGame) {
+      if (turn) {
+        const updateStat = stats.oPlayer + 1;
+        setStats({ ...stats, oPlayer: updateStat });
+      } else {
+        const updateStat = stats.xPlayer + 1;
+        setStats({ ...stats, xPlayer: updateStat });
+      }
       setEndGame(true);
     }
   }, [gameBox]);
@@ -126,68 +137,71 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
   };
 
   return (
-    <div className="w-w460 h-h623 flex flex-col gap-5">
-      <div className="flex justify-between gap-5 items-center">
-        <img src={Logo} />
-        <div className="text-silver bg-semiDarkNavy w-w140 h-h52 rounded-lg shadow-DSSButton shadow-darkNavyShadow flex justify-center items-center gap-3 text-xl select-none">
-          <span className="font-bold text-2xl">{turn ? "X" : "O"}</span>TURN
+    <>
+      {endGame && <Modal turn={turn} restartGame={restartGame} />}
+      <div className="w-w460 h-h623 flex flex-col gap-5">
+        <div className="flex justify-between gap-5 items-center">
+          <img src={Logo} />
+          <div className="text-silver bg-semiDarkNavy w-w140 h-h52 rounded-lg shadow-DSSButton shadow-darkNavyShadow flex justify-center items-center gap-3 text-xl select-none">
+            <span className="font-bold text-2xl">{turn ? "X" : "O"}</span>TURN
+          </div>
+          <SecondaryButton
+            icon={true}
+            text={`replay`}
+            color="silver"
+            size={"w-w52 h-h52"}
+            onClickHandler={restartGame}
+          />
         </div>
-        <SecondaryButton
-          icon={true}
-          text={`replay`}
-          color="silver"
-          size={"w-w52 h-h52"}
-          onClickHandler={restartGame}
-        />
+        <div className="flex flex-wrap gap-5">
+          {gameBox.map((v) => {
+            return (
+              <Box
+                key={v.id}
+                id={v.id}
+                value={v.value}
+                turn={turn}
+                drawSymbol={drawSymbol}
+              />
+            );
+          })}
+        </div>
+        <div className="flex justify-between items-center gap-5">
+          <div className="w-w140 h-h72 rounded-lg bg-lightBlue text-darkNavy flex flex-col gap-1 justify-center items-center select-none">
+            <h1 className="text-sm">
+              X (
+              {gameType === 1
+                ? playersMark
+                  ? "YOU"
+                  : "CPU"
+                : playersMark
+                ? "P1"
+                : "P2"}
+              )
+            </h1>
+            <span className="text-xl font-semibold">{stats.xPlayer}</span>
+          </div>
+          <div className="w-w140 h-h72 rounded-lg bg-silver text-darkNavy flex flex-col gap-1 justify-center items-center select-none">
+            <h1 className="text-sm">TIES</h1>
+            <span className="text-xl font-semibold">{stats.tie}</span>
+          </div>
+          <div className="w-w140 h-h72 rounded-lg bg-lightYellow text-darkNavy flex flex-col gap-1 justify-center items-center select-none">
+            <h1 className="text-sm">
+              O (
+              {gameType === 1
+                ? !playersMark
+                  ? "YOU"
+                  : "CPU"
+                : !playersMark
+                ? "P1"
+                : "P2"}
+              )
+            </h1>
+            <span className="text-xl font-semibold">{stats.oPlayer}</span>
+          </div>
+        </div>
       </div>
-      <div className="flex flex-wrap gap-5">
-        {gameBox.map((v) => {
-          return (
-            <Box
-              key={v.id}
-              id={v.id}
-              value={v.value}
-              turn={turn}
-              drawSymbol={drawSymbol}
-            />
-          );
-        })}
-      </div>
-      <div className="flex justify-between items-center gap-5">
-        <div className="w-w140 h-h72 rounded-lg bg-lightBlue text-darkNavy flex flex-col gap-1 justify-center items-center select-none">
-          <h1 className="text-sm">
-            X (
-            {gameType === 1
-              ? playersMark
-                ? "YOU"
-                : "CPU"
-              : playersMark
-              ? "P1"
-              : "P2"}
-            )
-          </h1>
-          <span className="text-xl font-semibold">14</span>
-        </div>
-        <div className="w-w140 h-h72 rounded-lg bg-silver text-darkNavy flex flex-col gap-1 justify-center items-center select-none">
-          <h1 className="text-sm">TIES</h1>
-          <span className="text-xl font-semibold">32</span>
-        </div>
-        <div className="w-w140 h-h72 rounded-lg bg-lightYellow text-darkNavy flex flex-col gap-1 justify-center items-center select-none">
-          <h1 className="text-sm">
-            O (
-            {gameType === 1
-              ? !playersMark
-                ? "YOU"
-                : "CPU"
-              : !playersMark
-              ? "P1"
-              : "P2"}
-            )
-          </h1>
-          <span className="text-xl font-semibold">11</span>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
