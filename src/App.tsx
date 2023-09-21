@@ -7,12 +7,16 @@ function App() {
   const [playersMark, setPlayersMark] = useState<boolean>(true);
 
   return (
-    <div className="w-full min-h-screen bg-darkNavy flex justify-center items-center">
+    <div className="w-full min-h-screen bg-darkNavy flex justify-center sm:items-center pt-20 sm:pt-0">
       {gameType === 0 && (
         <GameMenu setGameType={setGameType} setPlayersMark={setPlayersMark} />
       )}
       {gameType !== 0 && (
-        <PlayGame gameType={gameType} playersMark={playersMark} />
+        <PlayGame
+          gameType={gameType}
+          setGameType={setGameType}
+          playersMark={playersMark}
+        />
       )}
     </div>
   );

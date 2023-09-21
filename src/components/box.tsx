@@ -9,7 +9,7 @@ const Box = ({ id, value, turn, drawSymbol }: PropsType) => {
   return (
     <div
       onClick={() => drawSymbol(id)}
-      className="w-w140 h-h140 bg-semiDarkNavy rounded-lg shadow-DSSButton shadow-darkNavyShadow relative group"
+      className="w-w96 sm:w-w140 h-h96 sm:h-h140 bg-semiDarkNavy rounded-lg shadow-DSSButton shadow-darkNavyShadow relative group"
     >
       <span className="flex justify-center items-center w-full h-full text-7xl font-bold select-none cursor-pointer">
         {value === 0 ? (

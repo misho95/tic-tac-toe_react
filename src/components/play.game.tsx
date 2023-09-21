@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 interface PropsType {
   gameType: number;
   playersMark: boolean;
+  setGameType: (arg: number) => void;
 }
 
 interface gameBoxType {
@@ -14,7 +15,7 @@ interface gameBoxType {
   value: number;
 }
 
-const PlayGame = ({ gameType, playersMark }: PropsType) => {
+const PlayGame = ({ gameType, playersMark, setGameType }: PropsType) => {
   const newGame = Array.from({ length: 9 }, (_, index) => ({
     id: index + 1,
     value: 0,
@@ -26,6 +27,7 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
   const [turn, setTurn] = useState(true);
   const [endGame, setEndGame] = useState(false);
   const [stats, setStats] = useState(newStats);
+  const [result, setResult] = useState(0);
 
   const drawSymbol = (id: number) => {
     if (!endGame) {
@@ -73,6 +75,8 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
         gameBox[c - 1].value === playerValue
       ) {
         return true;
+      } else if (gameBox.every((square) => square.value !== 0)) {
+        return -1; // It's a draw
       }
     }
     return false;
@@ -117,15 +121,21 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
       cpuAi();
     }
     const endGame = checkWinner(gameBox, !turn);
-
-    if (endGame) {
+    if (endGame && endGame !== -1) {
       if (turn) {
         const updateStat = stats.oPlayer + 1;
         setStats({ ...stats, oPlayer: updateStat });
+        setResult(2);
       } else {
         const updateStat = stats.xPlayer + 1;
+        setResult(1);
         setStats({ ...stats, xPlayer: updateStat });
       }
+      setEndGame(true);
+    } else if (endGame === -1) {
+      const updateStat = stats.tie + 1;
+      setStats({ ...stats, tie: updateStat });
+      setResult(3);
       setEndGame(true);
     }
   }, [gameBox]);
@@ -136,10 +146,23 @@ const PlayGame = ({ gameType, playersMark }: PropsType) => {
     setEndGame(false);
   };
 
+  const quitGame = () => {
+    restartGame();
+    setGameType(0);
+  };
+
   return (
     <>
-      {endGame && <Modal turn={turn} restartGame={restartGame} />}
-      <div className="w-w460 h-h623 flex flex-col gap-5">
+      {endGame && (
+        <Modal
+          result={result}
+          playersMark={playersMark}
+          restartGame={restartGame}
+          gameType={gameType}
+          quitGame={quitGame}
+        />
+      )}
+      <div className="w-w328 sm:w-w460 h-h516 sm:h-h623 flex flex-col gap-5">
         <div className="flex justify-between gap-5 items-center">
           <img src={Logo} />
           <div className="text-silver bg-semiDarkNavy w-w140 h-h52 rounded-lg shadow-DSSButton shadow-darkNavyShadow flex justify-center items-center gap-3 text-xl select-none">
