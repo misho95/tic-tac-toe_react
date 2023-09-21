@@ -1,6 +1,7 @@
 import Logo from "../assets/logo.svg";
 import Box from "./box";
 import Modal from "./modal";
+import RestartModal from "./restart.modal";
 import SecondaryButton from "./secondary.button";
 import { useEffect, useState } from "react";
 
@@ -15,6 +16,12 @@ interface gameBoxType {
   value: number;
 }
 
+export interface statsType {
+  xPlayer: number;
+  tie: number;
+  oPlayer: number;
+}
+
 const PlayGame = ({ gameType, playersMark, setGameType }: PropsType) => {
   const newGame = Array.from({ length: 9 }, (_, index) => ({
     id: index + 1,
@@ -26,8 +33,9 @@ const PlayGame = ({ gameType, playersMark, setGameType }: PropsType) => {
   const [gameBox, setGameBox] = useState<gameBoxType[]>(newGame);
   const [turn, setTurn] = useState(true);
   const [endGame, setEndGame] = useState(false);
-  const [stats, setStats] = useState(newStats);
+  const [stats, setStats] = useState<statsType>(newStats);
   const [result, setResult] = useState(0);
+  const [show, setShow] = useState(false);
 
   const drawSymbol = (id: number) => {
     if (!endGame) {
@@ -153,6 +161,13 @@ const PlayGame = ({ gameType, playersMark, setGameType }: PropsType) => {
 
   return (
     <>
+      {show && (
+        <RestartModal
+          setShow={setShow}
+          restartGame={restartGame}
+          setStats={setStats}
+        />
+      )}
       {endGame && (
         <Modal
           result={result}
@@ -173,7 +188,7 @@ const PlayGame = ({ gameType, playersMark, setGameType }: PropsType) => {
             text={`replay`}
             color="silver"
             size={"w-w52 h-h52"}
-            onClickHandler={restartGame}
+            onClickHandler={() => setShow(true)}
           />
         </div>
         <div className="flex flex-wrap gap-5">
